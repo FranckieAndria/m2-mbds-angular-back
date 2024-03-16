@@ -12,7 +12,7 @@ const bdInitialStudents = [
 
 const bdInitialAssignments = [
   { nom: 'TP1 BigDATA',matiere:'BIGDATA',dateDeCreation: '2023-06-03',dateDeRendu: '2023-06-03',imagePath:'',note:'15',etudiant:'',professeur:'',remarque:'',rendu: false },
-  { matiere: 'Fivechat',dateDeCreation:'' ,dateDeRendu: '', rendu: false },
+  { nom: 'TP1 BigDATA',matiere:'BIGDATA',dateDeCreation: '2023-06-03',dateDeRendu: '2023-06-03',imagePath:'',note:'15',etudiant:'',professeur:'',remarque:'',rendu: false },
 ];
 
 
