@@ -1,16 +1,6 @@
 /**
  * [...] on gérera le cas particulier admin
- * qui lui seul peut faire EDIT et DELETE des assignments
- */
-const Admin = [
-  {
-    nom: 'Université Côte d\'Azur',
-    prenom: 'Administration',
-    email: 'administration@univ.uca',
-    password: 'admin@univ',
-    role: 'ADMIN'
-  }
-];
+ * qui lui seul peut faire EDIT et DELETE des assignments  => PROFESSEUR DONT LE RÔLE EST ADMIN
 
 /**
  * Les formulaires d'ajout et de détails proposeront un choix fixe de matières 
