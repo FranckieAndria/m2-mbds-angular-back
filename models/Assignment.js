@@ -9,8 +9,8 @@ const AssignmentSchema = new Schema({
     dateDeCreation: { type: Date, required: true, default: Date.now },
     dateDeRendu: { type: Date, required: false },
     note: { type: Number, required: true, default: -1 },
-    remarque: { type: string, required: false, default: '' },
+    remarque: { type: String, required: false, default: '' },
     rendu: { type: Boolean, required: true, default: false }
-})
+}) ;
 
 module.exports = mongoose.model("Assignment", AssignmentSchema) ;
