@@ -1,4 +1,4 @@
-let Assignment = require('../models/assignment');
+let Assignment = require('../models/assignmentOld');
 
 // Récupérer tous les assignments (GET)
 /*
