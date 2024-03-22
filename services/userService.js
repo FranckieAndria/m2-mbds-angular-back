@@ -11,7 +11,6 @@ const loginUser = async (inputPassword, user, req) => {
         let dateExpiration = new Date() ;
         dateExpiration.setMinutes(dateExpiration.getMinutes() + 30);
         const tokenContent = { user: user, dateLogin: new Date(), dateExpiration: dateExpiration } ;
-console.log(tokenContent) ;
         const token = jwt.sign(tokenContent, SECRET_KEY) ;
         return {
             token: token,
