@@ -16,5 +16,5 @@
 
 
 /*
-    Les réponses doivent avoir un format unique pour faciliter la gestion
+    Les réponses doivent avoir un format unique pour la gestion des données depuis FRONT
 */
