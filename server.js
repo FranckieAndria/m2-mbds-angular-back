@@ -26,6 +26,7 @@ let port = process.env.PORT || 8010;
 *****************/
 const prefix = '/api';
 app.use(prefix + '/etudiants', require('./routes/etudiants.js')) ;
+app.use(prefix + '/professeurs', require('./routes/professeurs.js')) ;
 /*****************
 * ROUTES - START *
 *****************/
