@@ -20,8 +20,15 @@ app.use(bodyParser.json());
 // Obligatoire si déploiement dans le cloud !
 let port = process.env.PORT || 8010;
 
-// les routes
+
+/*****************
+* ROUTES - START *
+*****************/
 const prefix = '/api';
+app.use(prefix + '/etudiants', require('./routes/etudiants.js')) ;
+/*****************
+* ROUTES - START *
+*****************/
 
 // http://serveur..../assignments
 app.route(prefix + '/assignments')
