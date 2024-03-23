@@ -1,51 +1,75 @@
 const Assignment = require('../models/Assignment');
-const Etudiant = require('../models/Etudiant') ;
+const Etudiant = require('../models/Etudiant');
 
 const { ObjectId } = require('mongodb');
-const { loginUser } = require('./userService') ;
+const { loginUser } = require('./userService');
 
 
 /*************************************
-* CONSTANTS FOR ALL FUNCTIONS - START *
+* CONSTANT FOR ALL FUNCTIONS - START *
 *************************************/
-const lookUpProfesseur = {
-    from: 'professeurs',
-    localField: 'professeur',
-    foreignField: '_id',
-    as: 'professeur',
-    pipeline: [{$project: {nom: 1, prenom: 1, email: 1, matiere: 1, imagePath: 1}}]
-} ;
+const MIN_DATE = "2000-01-01";
+const MAX_DATE = "2100-12-31";
+
+function getLookupProfesseur(pipeline) {
+    return {
+        from: 'professeurs',
+        localField: 'professeur',
+        foreignField: '_id',
+        as: 'professeur',
+        pipeline: pipeline
+    };
+}
+
+function sendPaginatedResult(aggregateQuery, res, page, limit) {
+    Assignment.aggregatePaginate(
+        aggregateQuery,
+        {
+            page: parseInt(page) || 1,
+            limit: parseInt(limit) || 10
+        },
+        (err, data) => {
+            if (err) res.send(err);
+            res.send(data);
+        }
+    );
+}
 /***********************************
-* CONSTANTS FOR ALL FUNCTIONS - END *
+* CONSTANT FOR ALL FUNCTIONS - END *
 ***********************************/
 
 
 /* LISTE des ASSIGNMENTS d'un ETUDIANT [PAGINATION - SORT - (Filtre rendu | non-rendu)] */
 const listeAssignment = async (req, res) => {
     const aggregateQuery = Assignment.aggregate();
-    const renduQuery = parseInt(req.query.rendu) || 'all' ;
-    const matching = renduQuery == 'all' ? {etudiant: ObjectId(req.params.id)} : {etudiant: ObjectId(req.params.id),rendu: renduQuery == 1} ;
+    const renduQuery = parseInt(req.query.rendu) || 'all';
+    const matching = renduQuery == 'all' ? { etudiant: ObjectId(req.params.id) } : { etudiant: ObjectId(req.params.id), rendu: renduQuery == 1 };
     aggregateQuery.match(matching);
-    aggregateQuery.sort({dateDeRendu: parseInt(req.query.tri) || 1});
-    aggregateQuery.lookup (lookUpProfesseur);
+    aggregateQuery.sort({ dateDeRendu: parseInt(req.query.tri) || 1 });
+    aggregateQuery.lookup(getLookupProfesseur([{ $project: { nom: 1, prenom: 1, email: 1, matiere: 1, imagePath: 1 } }]));
+    sendPaginatedResult(aggregateQuery, res, req.query.page, req.query.limit);
+};
 
-    Assignment.aggregatePaginate(
-        aggregateQuery,
-        {
-            page: parseInt(req.query.page) || 1,
-            limit: parseInt(req.query.limit) || 10
-        } ,
-        (err, data) => {
-            if (err) res.send(err) ;
-            res.send(data) ;
-        }
-    );
-} ;
-
-/* RECHERCHE par [ETUDIANT connecté] - MATIERE - DATE de CRÉATION - DATE de RENDU [PAGINATION] */
+/* RECHERCHE par [ETUDIANT connecté] - TITRE - MATIERE - DATE de CRÉATION - DATE de RENDU [PAGINATION] */
 const searchAssignment = async (req, res) => {
+    const dateDeCreationInf = req.query.dateDeCreationInf || MIN_DATE;
+    const dateDeCreationSup = req.query.dateDeCreationSup || MAX_DATE;
+    const dateDeRenduInf = req.query.dateDeRenduInf || MIN_DATE;
+    const dateDeRenduSup = req.query.dateDeRenduSup || MAX_DATE;
+    
+    const aggregateQuery = Assignment.aggregate();
+    const matching = {
+        professeur: { $ne: [] },
+        etudiant: ObjectId(req.params.id),
+        titre: { $regex: new RegExp(req.query.titre || '', "i") },
+        dateDeRendu: {$gte: new Date(dateDeRenduInf), $lte: new Date(dateDeRenduSup)},
+        dateDeCreation: {$gte: new Date(dateDeCreationInf), $lte: new Date(dateDeCreationSup)}
+    };
+    aggregateQuery.lookup(getLookupProfesseur([{$match: { "matiere.intitule": { $regex: new RegExp(req.query.matiere || '', "i") }}},{$project: { nom: 1, prenom: 1, email: 1, matiere: 1, imagePath: 1 }}]));
+    aggregateQuery.match(matching);
 
-} ;
+    sendPaginatedResult(aggregateQuery, res, req.query.page, req.query.limit);
+};
 
 
 /* AJOUT D'UN NOUVEL ASSIGNMENT */
@@ -57,26 +81,26 @@ const searchAssignment = async (req, res) => {
 // LOGIN - START
 const login = async (req, res) => {
     const logFailed = {
-        token: false, 
-        logged: false, 
-        message: 'Erreur d\'authentification', 
-        body: req.body 
-    } ;
-    const email = req.body.email ;
-    const password = req.body.password ;
-    if (!email || !password) res.send(logFailed) ;
+        token: false,
+        logged: false,
+        message: 'Erreur d\'authentification',
+        body: req.body
+    };
+    const email = req.body.email;
+    const password = req.body.password;
+    if (!email || !password) res.send(logFailed);
     else {
-        const etudiant = await Etudiant.findOne({email: email}).exec() ;
+        const etudiant = await Etudiant.findOne({ email: email }).exec();
         if (etudiant) {
-            const loginResult = await loginUser(password, etudiant, req) ;
-            res.send(loginResult) ;
-        } else res.send(logFailed) ;
+            const loginResult = await loginUser(password, etudiant, req);
+            res.send(loginResult);
+        } else res.send(logFailed);
     }
-} ;
+};
 // LOGIN - END
 
 module.exports = {
     login,
-    listeAssignment, 
+    listeAssignment,
     searchAssignment
-} ;
+};
