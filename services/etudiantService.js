@@ -39,6 +39,10 @@ function sendPaginatedResult(aggregateQuery, res, page, limit) {
 ***********************************/
 
 
+
+/********************
+* FONCTIONS - START *
+********************/
 /* LISTE des ASSIGNMENTS d'un ETUDIANT [PAGINATION - SORT - (Filtre rendu | non-rendu)] */
 const listeAssignment = async (req, res) => {
     const aggregateQuery = Assignment.aggregate();
@@ -71,8 +75,24 @@ const searchAssignment = async (req, res) => {
     sendPaginatedResult(aggregateQuery, res, req.query.page, req.query.limit);
 };
 
-
 /* AJOUT D'UN NOUVEL ASSIGNMENT */
+const saveAssignment = async (req, res) => {
+    let assignment = new Assignment();
+    assignment.titre = req.body.titre;
+    assignment.etudiant = req.params.id;
+    assignment.professeur = req.body.professeur;
+    assignment.dateDeRendu = req.body.dateDeRendu;
+    assignment.save((err) => {
+        const result = {
+            'saved': err ? false : true,
+            'message': err ? 'Erreur lors de l\'enregistrement de l\'assignment' : 'Assignment enregistré avec succès'
+        } ;
+        res.send(result);
+    });
+};
+
+
+
 
 /* EXPORTATION PDF du RELEVÉ de NOTE d'un ETUDIANT */
 
@@ -99,8 +119,13 @@ const login = async (req, res) => {
 };
 // LOGIN - END
 
+/******************
+* FONCTIONS - END *
+******************/
+
 module.exports = {
     login,
     listeAssignment,
-    searchAssignment
+    searchAssignment,
+    saveAssignment
 };
