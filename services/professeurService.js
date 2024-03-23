@@ -1,6 +1,14 @@
 const Professeur = require('../models/Professeur') ;
 const { loginUser } = require('./userService');
 
+/* LISTE des ASSIGNMENTS d'un PROFESSEUR [PAGINATION - par CATÉGORIE RENDU ou NON-RENDU] */
+
+/* RECHERCHE par [PROFESSEUR connecté] - MATIERE - DATE de CRÉATION - DATE de RENDU [PAGINATION] */
+
+/* METTRE UN ASSIGNMENT en RENDU (Envoyé un email à l'ETUDIANT) */
+
+
+
 // LOGIN - START
 const login = async (req, res) => {
     const logFailed = {
