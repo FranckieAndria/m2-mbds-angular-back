@@ -4,14 +4,14 @@ const Etudiant = require('../models/Etudiant') ;
 const { ObjectId } = require('mongodb');
 const { loginUser } = require('./userService') ;
 
-/* LISTE des ASSIGNMENTS d'un ETUDIANT [PAGINATION - ORDER BY - (Filtre rendu | non-rendu)] */
+/* LISTE des ASSIGNMENTS d'un ETUDIANT [PAGINATION - SORT - (Filtre rendu | non-rendu)] */
 const listeAssignment = async (req, res) => {
     const aggregateQuery = Assignment.aggregate();
-    aggregateQuery.match({
-        etudiant: ObjectId(req.params.id)
-    });
+    const renduQuery = parseInt(req.query.rendu) || 'all' ;
+    const matching = renduQuery == 'all' ? {etudiant: ObjectId(req.params.id)} : {etudiant: ObjectId(req.params.id),rendu: renduQuery == 1} ;
+    aggregateQuery.match(matching);
     aggregateQuery.sort({
-        dateDeRendu: 1
+        dateDeRendu: parseInt(req.query.tri) || 1
     });
     aggregateQuery.lookup ({
         from: 'professeurs',
