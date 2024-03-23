@@ -3,13 +3,14 @@ const Etudiant = require('../models/Etudiant');
 
 const { ObjectId } = require('mongodb');
 const { loginUser } = require('./userService');
-
+const { createPDF } = require('./pdfService');
 
 /*************************************
 * CONSTANT FOR ALL FUNCTIONS - START *
 *************************************/
 const MIN_DATE = "2000-01-01";
 const MAX_DATE = "2100-12-31";
+const DEFAULT_SORT = -1 ;
 
 function getLookupProfesseur(pipeline) {
     return {
@@ -49,7 +50,7 @@ const listeAssignment = async (req, res) => {
     const renduQuery = parseInt(req.query.rendu) || 'all';
     const matching = renduQuery == 'all' ? { etudiant: ObjectId(req.params.id) } : { etudiant: ObjectId(req.params.id), rendu: renduQuery == 1 };
     aggregateQuery.match(matching);
-    aggregateQuery.sort({ dateDeRendu: parseInt(req.query.tri) || 1 });
+    aggregateQuery.sort({ dateDeRendu: parseInt(req.query.tri) || DEFAULT_SORT });
     aggregateQuery.lookup(getLookupProfesseur([{ $project: { nom: 1, prenom: 1, email: 1, matiere: 1, imagePath: 1 } }]));
     sendPaginatedResult(aggregateQuery, res, req.query.page, req.query.limit);
 };
@@ -91,11 +92,12 @@ const saveAssignment = async (req, res) => {
     });
 };
 
-
-
-
 /* EXPORTATION PDF du RELEVÉ de NOTE d'un ETUDIANT */
-
+const createReportCard = async (req, res) => {
+    const assignments = await Assignment.find({etudiant: ObjectId(req.params.id), rendu: true}).populate('professeur', 'nom prenom email matiere.intitule').sort({dateDeRendu: -1}).exec() ;
+    createPDF(assignments, req.params.id, req.query.nom, req.query.prenom, req.query.email, req.query.niveau);
+    res.status(200).json();
+}
 
 
 // LOGIN - START
@@ -127,5 +129,6 @@ module.exports = {
     login,
     listeAssignment,
     searchAssignment,
-    saveAssignment
+    saveAssignment,
+    createReportCard
 };
