@@ -7,6 +7,7 @@ const { loginUser } = require('./userService');
 
 /* METTRE UN ASSIGNMENT en RENDU (Envoyé un email à l'ETUDIANT) */
 
+/* LISTE des MATIÈRES pour l'enregistrement d'un NOUVELL ASSIGNMENT */
 
 
 // LOGIN - START
