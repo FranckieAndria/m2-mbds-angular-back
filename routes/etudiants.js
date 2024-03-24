@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const { login, listeAssignment, searchAssignment, saveAssignment, createReportCard, releveNotes } = require('../services/etudiantService');
+const { login, listeAssignment, searchAssignment, saveAssignment, createReportCard, releveNotes, updateEtudiant } = require('../services/etudiantService');
 
 /* LISTE des ASSIGNMENTS d'un ETUDIANT [PAGINATION - ORDER BY - (Filtre rendu | non-rendu)] */
 router.get('/:id/assignments', listeAssignment);
@@ -17,6 +17,9 @@ router.get('/:id/report', createReportCard);
 
 /* RELEVE DES NOTES */
 router.get('/:id/releve', releveNotes);
+
+/* MODIFICATION */
+router.put('/:id', updateEtudiant);
 
 /* Login */
 router.post('/login', login);

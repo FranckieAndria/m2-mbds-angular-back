@@ -105,6 +105,14 @@ const createReportCard = async (req, res) => {
     res.status(200).json();
 }
 
+/* MODIFICATION */
+const updateEtudiant = async (req, res) => {
+    const result = await Etudiant.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.send({
+        updated: result != null,
+        message: result != null ? 'Information(s) sur l\'étudiant modifiée(s) avec succès' : 'Erreur lors de la modification des informations sur l\'étudiant'
+    });
+};
 
 // LOGIN - START
 const login = async (req, res) => {
@@ -137,5 +145,6 @@ module.exports = {
     searchAssignment,
     saveAssignment,
     createReportCard, 
-    releveNotes
+    releveNotes,
+    updateEtudiant
 };

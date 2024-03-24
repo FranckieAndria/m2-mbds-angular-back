@@ -24,7 +24,6 @@ const sendMail = async (sendTo, mailContent) => {
         html: mailContent
     }, function (err, info) {
         if (err) console.log(err);
-        else console.log('Mail envoyé avec succès');
     });
 };
 

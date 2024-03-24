@@ -55,8 +55,6 @@ const listeAssignment = async (req, res) => {
 
 /* RECHERCHE par [PROFESSEUR connecté] - MATIERE - DATE de CRÉATION - DATE de RENDU [PAGINATION] */
 
-/* METTRE UN ASSIGNMENT en RENDU (Envoyé un email à l'ETUDIANT) */
-
 /* LISTE des MATIÈRES pour l'enregistrement d'un NOUVELL ASSIGNMENT */
 const listeMatiere = async (req, res) => {
     const professeurs = await Professeur.find().select('nom prenom matiere.intitule').exec();

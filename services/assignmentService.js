@@ -13,7 +13,7 @@ const details = async (req, res) => {
     res.send({
         exists: assignment.length > 0,
         assignment: assignment,
-        message: 'Assignment introuvable'
+        message: assignment.length > 0 ? 'Détails récupérés avec succès' : 'Assignment introuvable'
     });
 };
 
@@ -21,7 +21,9 @@ const details = async (req, res) => {
 const updateAssignment = async (req, res) => {
     const result = await Assignment.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (req.body.rendu == 'true') {
-        sendMail('franckieandriamalala@gmail.com', getEmailContent('', '', '', '', ''));
+        const assign = await Assignment.findById(ObjectId(req.params.id)).populate('etudiant', 'email').populate('professeur', 'nom prenom matiere.intitule').exec();
+        const professeur = assign.professeur.nom + ' ' + assign.professeur.prenom;
+        sendMail(assign.etudiant.email, getEmailContent(req.body.titre, professeur, assign.professeur.matiere.intitule, parseInt(req.body.note), req.body.remarque));
     }
     res.send({
         updated: result != null,
