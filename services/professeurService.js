@@ -38,6 +38,10 @@ function sendPaginatedResult(aggregateQuery, res, page, limit) {
 * CONSTANT FOR ALL FUNCTIONS - END *
 ***********************************/
 
+
+/********************
+* FONCTIONS - START *
+********************/
 /* LISTE des ASSIGNMENTS d'un PROFESSEUR [PAGINATION - SORT - par CATÉGORIE RENDU ou NON-RENDU] */
 const listeAssignment = async (req, res) => {
     const aggregateQuery = Assignment.aggregate();
@@ -79,6 +83,9 @@ const login = async (req, res) => {
     }
 } ;
 // LOGIN - END
+/*****************
+* FONCTIONS - EN *
+*****************/
 
 module.exports = {
     login, 
