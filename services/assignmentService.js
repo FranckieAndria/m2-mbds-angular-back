@@ -9,7 +9,7 @@ const { sendMail } = require('./mailService');
 
 /* DETAILS D'UN ASSIGNMENT */
 const details = async (req, res) => {
-    const assignment = await Assignment.find({ _id: ObjectId(req.params.id) }).populate('professeur', 'nom prenom email matiere').populate('etudiant', 'nom prenom email niveau').exec();
+    const assignment = await Assignment.find({ _id: ObjectId(req.params.id) }).populate('professeur', 'nom prenom email matiere imagePath').populate('etudiant', 'nom prenom email niveau imagePath').exec();
     res.send({
         exists: assignment.length > 0,
         assignment: assignment,

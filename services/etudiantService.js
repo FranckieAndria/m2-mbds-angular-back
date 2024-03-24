@@ -110,7 +110,8 @@ const updateEtudiant = async (req, res) => {
     const result = await Etudiant.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.send({
         updated: result != null,
-        message: result != null ? 'Information(s) sur l\'étudiant modifiée(s) avec succès' : 'Erreur lors de la modification des informations sur l\'étudiant'
+        message: result != null ? 'Information(s) sur l\'étudiant modifiée(s) avec succès' : 'Erreur lors de la modification des informations sur l\'étudiant',
+        etudiant: result
     });
 };
 

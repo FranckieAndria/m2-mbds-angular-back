@@ -61,6 +61,16 @@ const listeMatiere = async (req, res) => {
     res.send(professeurs);
 };
 
+/* MODIFICATION */
+const updateProfesseur = async (req, res) => {
+    const result = await Professeur.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.send({
+        updated: result != null,
+        message: result != null ? 'Information(s) sur le professeur modifiée(s) avec succès' : 'Erreur lors de la modification des informations sur le professeur',
+        professeur: result
+    });
+};
+
 // LOGIN - START
 const login = async (req, res) => {
     const logFailed = {
@@ -88,5 +98,6 @@ const login = async (req, res) => {
 module.exports = {
     login, 
     listeMatiere,
-    listeAssignment
+    listeAssignment,
+    updateProfesseur
 } ;
