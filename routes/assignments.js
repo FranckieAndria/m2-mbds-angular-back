@@ -1,101 +1,15 @@
-let Assignment = require('../models/assignmentOld');
+var express = require('express');
+var router = express.Router();
 
-// Récupérer tous les assignments (GET)
-/*
-function getAssignments(req, res){
-    Assignment.find((err, assignments) => {
-        if(err){
-            res.send(err)
-        }
+const { details, updateAssignment, deleteAssignment } = require('../services/assignmentService');
 
-        res.send(assignments);
-    });
-}
-*/
+/* DETAILS D'UN ASSIGNMENT */
+router.get('/:id', details) ;
 
-function getAssignments(req, res){
-    let aggregateQuery = Assignment.aggregate();
+/* MODIFICATION D'UN ASSIGNMENT (Si l'assignment est rendu => Envoyé un email à l'ETUDIANT) */
+router.put('/:id', updateAssignment);
 
-    Assignment.aggregatePaginate(
-        aggregateQuery, 
-        {
-            page: parseInt(req.query.page) || 1,
-            limit: parseInt(req.query.limit) || 10
-        },
-        (err, data) => {
-            if(err){
-                res.send(err)
-            }
-    
-            res.send(data);
-        }
-    );
-}
+/* SUPPRESSION D'UN ASSIGNMENT */
+router.delete('/:id', deleteAssignment);
 
-// Récupérer un assignment par son id (GET)
-function getAssignment(req, res){
-    let assignmentId = req.params.id;
-    Assignment.findById(assignmentId, (err, assignment) =>{
-        if(err){res.send(err)}
-        res.json(assignment);
-    })
-
-    /*
-    Assignment.findOne({id: assignmentId}, (err, assignment) =>{
-        if(err){res.send(err)}
-        res.json(assignment);
-    })
-    */
-}
-
-// Ajout d'un assignment (POST)
-function postAssignment(req, res){
-    let assignment = new Assignment();
-    assignment.id = req.body.id;
-    assignment.nom = req.body.nom;
-    assignment.dateDeRendu = req.body.dateDeRendu;
-    assignment.rendu = req.body.rendu;
-
-    console.log("POST assignment reçu :");
-    console.log(assignment)
-
-    assignment.save( (err) => {
-        if(err){
-            res.send('cant post assignment ', err);
-        }
-        res.json({ message: `${assignment.nom} saved!`})
-    })
-}
-
-// Update d'un assignment (PUT)
-function updateAssignment(req, res) {
-    console.log("UPDATE recu assignment : ");
-    console.log(req.body);
-    Assignment.findByIdAndUpdate(req.body._id, req.body, {new: true}, (err, assignment) => {
-        if (err) {
-            console.log(err);
-            res.send(err)
-        } else {
-          res.json({message: 'updated'})
-        }
-
-      // console.log('updated ', assignment)
-    });
-
-}
-
-// suppression d'un assignment (DELETE)
-// l'id est bien le _id de mongoDB
-function deleteAssignment(req, res) {
-
-    Assignment.findByIdAndRemove(req.params.id, (err, assignment) => {
-        if (err) {
-            res.send(err);
-        }
-        res.json({message: `${assignment.nom} deleted`});
-    })
-}
-
-
-
-module.exports = { getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment };
+module.exports = router;

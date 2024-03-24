@@ -1,8 +1,8 @@
 let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
-let assignment = require('./routes/assignments');
 
+// Connexion à la base de données sur Atlas
 require ('./services/atlas-connexion.js') ;
 
 // Pour accepter les connexions cross-domain (CORS)
@@ -25,21 +25,12 @@ let port = process.env.PORT || 8010;
 * ROUTES - START *
 *****************/
 const prefix = '/api';
-app.use(prefix + '/etudiants', require('./routes/etudiants')) ;
-app.use(prefix + '/professeurs', require('./routes/professeurs')) ;
+app.use(prefix + '/etudiants', require('./routes/etudiants'));
+app.use(prefix + '/professeurs', require('./routes/professeurs'));
+app.use(prefix + '/assignments', require('./routes/assignments'));
 /*****************
 * ROUTES - START *
 *****************/
-
-// http://serveur..../assignments
-app.route(prefix + '/assignments')
-  .post(assignment.postAssignment)
-  .put(assignment.updateAssignment)
-  .get(assignment.getAssignments);
-
-app.route(prefix + '/assignments/:id')
-  .get(assignment.getAssignment)
-  .delete(assignment.deleteAssignment);
 
 
 // On démarre le serveur

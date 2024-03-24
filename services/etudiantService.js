@@ -92,6 +92,12 @@ const saveAssignment = async (req, res) => {
     });
 };
 
+/* RELEVÉ DES NOTES */
+const releveNotes = async (req, res) => {
+    const assignments = await Assignment.find({etudiant: ObjectId(req.params.id), rendu: true}).populate('professeur', 'nom prenom email matiere.intitule').sort({dateDeRendu: -1}).exec() ;
+    res.send(assignments);
+};
+
 /* EXPORTATION PDF du RELEVÉ de NOTE d'un ETUDIANT */
 const createReportCard = async (req, res) => {
     const assignments = await Assignment.find({etudiant: ObjectId(req.params.id), rendu: true}).populate('professeur', 'nom prenom email matiere.intitule').sort({dateDeRendu: -1}).exec() ;
@@ -130,5 +136,6 @@ module.exports = {
     listeAssignment,
     searchAssignment,
     saveAssignment,
-    createReportCard
+    createReportCard, 
+    releveNotes
 };
