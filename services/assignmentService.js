@@ -3,9 +3,35 @@ const Assignment = require('../models/Assignment');
 const { sendMail } = require('./mailService');
 
 /* LISTE de TOUS LES ASSIGNMENTS [ADMINISTRATEUR - PAGINATION] */
-
-
-
+const getAll = async (req, res) => {
+    const aggregateQuery = Assignment.aggregate();
+    aggregateQuery.sort({ dateDeRendu: -1 });
+    aggregateQuery.lookup({
+        from: 'professeurs',
+        localField: 'professeur',
+        foreignField: '_id',
+        as: 'professeur',
+        pipeline: [{ $project: { nom: 1, prenom: 1, email: 1, matiere: 1, imagePath: 1 } }]
+    });
+    aggregateQuery.lookup({
+        from: 'etudiants',
+        localField: 'etudiant',
+        foreignField: '_id',
+        as: 'etudiant',
+        pipeline: [{ $project: { nom: 1, prenom: 1, email: 1, niveau: 1, imagePath: 1 } }]
+    });
+    Assignment.aggregatePaginate(
+        aggregateQuery,
+        {
+            page: parseInt(req.query.page) || 1,
+            limit: parseInt(req.query.limit) || 10
+        },
+        (err, data) => {
+            if (err) res.send(err);
+            res.send(data);
+        }
+    );
+};
 
 /* DETAILS D'UN ASSIGNMENT */
 const details = async (req, res) => {
@@ -55,5 +81,6 @@ const deleteAssignment = async (req, res) => {
 module.exports = {
     details, 
     deleteAssignment, 
-    updateAssignment
+    updateAssignment,
+    getAll
 };

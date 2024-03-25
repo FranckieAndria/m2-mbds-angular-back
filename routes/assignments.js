@@ -1,7 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-const { details, updateAssignment, deleteAssignment } = require('../services/assignmentService');
+const { details, updateAssignment, deleteAssignment, getAll } = require('../services/assignmentService');
+
+/* LISTE de tous les ASSIGNMENTS */
+router.get('/', getAll);
 
 /* DETAILS D'UN ASSIGNMENT */
 router.get('/:id', details) ;
