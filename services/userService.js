@@ -16,7 +16,13 @@ const loginUser = async (inputPassword, user, req) => {
             token: token,
             logged: true,
             message:'Authentification réussie',
-            body: req.body
+            body: req.body,
+            user: {
+                nom: user.nom,
+                prenom: user.prenom,
+                email: user.email,
+                role: user.role
+            }
         } ;
     } else {
         return {
