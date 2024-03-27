@@ -1,17 +1,13 @@
-// IMPORTATION - START
 const jwt = require('jsonwebtoken') ;
 const BCrypt = require('bcrypt') ;
-const SECRET_KEY = "m2-mbds-angular" ;
-// IMPORTATION - END
+const { SECRET_KEY } = require('./environment');
 
 const loginUser = async (inputPassword, user, req) => {
     const correctPassword = await BCrypt.compare(inputPassword, user.password) ;
     if (correctPassword) {
         user.password = '' ;
-        let dateExpiration = new Date() ;
-        dateExpiration.setMinutes(dateExpiration.getMinutes() + 30);
-        const tokenContent = { user: user, dateLogin: new Date(), dateExpiration: dateExpiration } ;
-        const token = jwt.sign(tokenContent, SECRET_KEY) ;
+        const tokenContent = { user: user, dateLogin: new Date() } ;
+        const token = jwt.sign(tokenContent, SECRET_KEY, { expiresIn: 1800 }) ;
         return {
             token: token,
             logged: true,
