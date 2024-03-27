@@ -8,19 +8,19 @@ const verifyToken = require('../services/tokenValidator');
 router.post('/login', login);
 
 /* LISTE des ASSIGNMENTS d'un ETUDIANT [PAGINATION - ORDER BY - (Filtre rendu | non-rendu)] */
-router.get('/:id/assignments', verifyToken, listeAssignment);
+router.get('/assignments', verifyToken, listeAssignment);
 
 /* RECHERCHE par [ETUDIANT connecté] - MATIERE - DATE de CRÉATION - DATE de RENDU [PAGINATION] */
-router.get('/:id/assignments/search', verifyToken, searchAssignment);
+router.get('/assignments/search', verifyToken, searchAssignment);
 
 /* AJOUT D'UN NOUVEL ASSIGNMENT */
-router.post('/:id/assignment', verifyToken, saveAssignment);
+router.post('/assignment', verifyToken, saveAssignment);
 
 /* EXPORTATION PDF du RELEVÉ de NOTE d'un ETUDIANT */
-router.get('/:id/report', verifyToken, createReportCard);
+router.get('/report', verifyToken, createReportCard);
 
 /* RELEVE DES NOTES */
-router.get('/:id/releve', verifyToken, releveNotes);
+router.get('/releve', verifyToken, releveNotes);
 
 /* MODIFICATION */
 router.put('/:id', updateEtudiant);

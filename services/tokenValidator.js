@@ -6,6 +6,7 @@ function verifyToken(req, res, next) {
     if (!token) return res.status(403).send({ auth: false, message: 'Erreur d\'authentication' });
     jwt.verify(token, SECRET_KEY, (err, decoded) => {
         if (err) return res.status(500).send({ auth: false, message: 'Erreur de la validation' });
+        req.params.id = decoded.user._id ;
         next();
     });
 }
