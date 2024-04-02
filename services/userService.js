@@ -17,7 +17,8 @@ const loginUser = async (inputPassword, user, req) => {
                 nom: user.nom,
                 prenom: user.prenom,
                 email: user.email,
-                role: user.role
+                role: user.role,
+                imagePath: user.imagePath
             }
         } ;
     } else {
