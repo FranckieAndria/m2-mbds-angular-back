@@ -101,8 +101,7 @@ const releveNotes = async (req, res) => {
 /* EXPORTATION PDF du RELEVÉ de NOTE d'un ETUDIANT */
 const createReportCard = async (req, res) => {
     const assignments = await Assignment.find({etudiant: ObjectId(req.params.id), rendu: true}).populate('professeur', 'nom prenom email matiere.intitule').sort({dateDeRendu: -1}).exec() ;
-    createPDF(assignments, req.params.id, req.query.nom, req.query.prenom, req.query.email, req.query.niveau);
-    res.status(200).json();
+    createPDF(res, assignments, req.params.id, req.query.nom, req.query.prenom, req.query.email, req.query.niveau);
 }
 
 /* MODIFICATION */

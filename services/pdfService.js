@@ -1,12 +1,19 @@
 const pdf = require('html-pdf-node');
 const fs = require('fs');
 
-const createPDF = async (assignments, id, nom, prenom, email, niveau) => {
+const createPDF = (res, assignments, id, nom, prenom, email, niveau) => {
     const htmlContent = createHTMLContent(assignments, nom, prenom, email, niveau);
     const options = { format: 'A4' };
     pdf.generatePdf({ content: htmlContent }, options).then(pdfBuffer => {
-        fs.writeFileSync('./public/pdf/' + id + '.pdf', pdfBuffer);
-        console.log('PDF généré avec succès.');
+        const filePath = './public/pdf/' + id + '.pdf';
+        fs.writeFileSync(filePath, pdfBuffer);
+        fs.readFile(filePath, function (err, data) {
+            if (err) {}
+            else {
+                res.contentType("application/pdf");
+                res.send(data);
+            }
+        });
     }).catch(error => {
         console.error('Erreur lors de la génération du PDF:', error);
     });
