@@ -57,6 +57,7 @@ const listeAssignment = async (req, res) => {
 
 /* RECHERCHE par [ETUDIANT connecté] - TITRE - MATIERE - DATE de CRÉATION - DATE de RENDU [PAGINATION] */
 const searchAssignment = async (req, res) => {
+    const titre = req.query.titre || '' ;
     const dateDeCreationInf = req.query.dateDeCreationInf || MIN_DATE;
     const dateDeCreationSup = req.query.dateDeCreationSup || MAX_DATE;
     const dateDeRenduInf = req.query.dateDeRenduInf || MIN_DATE;
@@ -68,13 +69,14 @@ const searchAssignment = async (req, res) => {
     let matching = {
         professeur: { $ne: [] },
         etudiant: ObjectId(req.params.id),
-        titre: { $regex: new RegExp(req.query.titre || '', "i") },
         dateDeRendu: {$gte: new Date(dateDeRenduInf), $lte: new Date(dateDeRenduSup)},
         dateDeCreation: {$gte: new Date(dateDeCreationInf), $lte: new Date(dateDeCreationSup)}
     };
+    if (titre != 'undefined') matching.titre = { $regex: new RegExp(titre, "i") } ;
     if (rendu != 0) matching.rendu = (rendu == 1);
     aggregateQuery.lookup(getLookupProfesseur([{$match: { "matiere.intitule": { $regex: new RegExp(matiere || '', "i") }}},{$project: { nom: 1, prenom: 1, email: 1, matiere: 1, imagePath: 1 }}]));
     aggregateQuery.match(matching);
+console.log(matching);
     sendPaginatedResult(aggregateQuery, res, req.query.page, req.query.limit);
 };
 
