@@ -76,7 +76,6 @@ const searchAssignment = async (req, res) => {
     if (rendu != 0) matching.rendu = (rendu == 1);
     aggregateQuery.lookup(getLookupProfesseur([{$match: { "matiere.intitule": { $regex: new RegExp(matiere || '', "i") }}},{$project: { nom: 1, prenom: 1, email: 1, matiere: 1, imagePath: 1 }}]));
     aggregateQuery.match(matching);
-console.log(matching);
     sendPaginatedResult(aggregateQuery, res, req.query.page, req.query.limit);
 };
 
