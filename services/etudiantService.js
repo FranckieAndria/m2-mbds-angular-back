@@ -44,6 +44,24 @@ function sendPaginatedResult(aggregateQuery, res, page, limit) {
 /********************
 * FONCTIONS - START *
 ********************/
+/* Elements de l'Home Page */
+const homeInfo = async (req, res) => {
+    let selector = {
+        etudiant: ObjectId(req.params.id)
+    };
+    const total = await Assignment.countDocuments(selector).exec();
+    selector.rendu = true;
+    const rendu = await Assignment.countDocuments(selector).exec();
+    selector.rendu = false;
+    const non_rendu = await Assignment.countDocuments(selector).exec();
+    const result = {
+        total: total || 0,
+        rendu: rendu || 0,
+        non_rendu: non_rendu || 0
+    };
+    res.send(result);
+};
+
 /* LISTE des ASSIGNMENTS d'un ETUDIANT [PAGINATION - SORT - (Filtre rendu | non-rendu)] */
 const listeAssignment = async (req, res) => {
     const aggregateQuery = Assignment.aggregate();
@@ -149,5 +167,6 @@ module.exports = {
     saveAssignment,
     createReportCard, 
     releveNotes,
-    updateEtudiant
+    updateEtudiant,
+    homeInfo
 };

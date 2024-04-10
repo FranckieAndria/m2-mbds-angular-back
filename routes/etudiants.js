@@ -1,11 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-const { login, listeAssignment, searchAssignment, saveAssignment, createReportCard, releveNotes, updateEtudiant } = require('../services/etudiantService');
+const { login, listeAssignment, searchAssignment, saveAssignment, createReportCard, releveNotes, updateEtudiant, homeInfo } = require('../services/etudiantService');
 const verifyToken = require('../services/tokenValidator');
 
 /* Login */
 router.post('/login', login);
+
+/* HOME Info */
+router.get('/home', verifyToken, homeInfo);
 
 /* LISTE des ASSIGNMENTS d'un ETUDIANT [PAGINATION - ORDER BY - (Filtre rendu | non-rendu)] */
 router.get('/assignments', verifyToken, listeAssignment);
