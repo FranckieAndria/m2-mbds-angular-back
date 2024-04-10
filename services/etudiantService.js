@@ -50,7 +50,7 @@ const listeAssignment = async (req, res) => {
     const renduQuery = parseInt(req.query.rendu) || 'all';
     const matching = renduQuery == 'all' ? { etudiant: ObjectId(req.params.id) } : { etudiant: ObjectId(req.params.id), rendu: renduQuery == 1 };
     aggregateQuery.match(matching);
-    aggregateQuery.sort({ dateDeRendu: parseInt(req.query.tri) || DEFAULT_SORT });
+    aggregateQuery.sort({ dateDeCreation: parseInt(req.query.tri) || DEFAULT_SORT });
     aggregateQuery.lookup(getLookupProfesseur([{ $project: { nom: 1, prenom: 1, email: 1, matiere: 1, imagePath: 1 } }]));
     sendPaginatedResult(aggregateQuery, res, req.query.page, req.query.limit);
 };
