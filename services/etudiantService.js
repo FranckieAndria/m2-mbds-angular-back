@@ -44,6 +44,31 @@ function sendPaginatedResult(aggregateQuery, res, page, limit) {
 /********************
 * FONCTIONS - START *
 ********************/
+/* Nombre d'assignments de l'étudiant groupé par Professeur | Matière */
+const homeInfoMatiere = async (req, res) => {
+    const aggregateQuery = Assignment.aggregate();
+    const matching = { etudiant: ObjectId(req.params.id) } ;
+    const grouping = { 
+        _id: {
+            etudiant: "$etudiant", 
+            professeur: "$professeur"
+        }, 
+        total: {
+            "$sum": 1 
+        }
+    } ;
+    aggregateQuery.match(matching);
+    aggregateQuery.group(grouping);
+    aggregateQuery.lookup({
+        from: 'professeurs',
+        localField: '_id.professeur',
+        foreignField: '_id',
+        as: 'professeurDetails',
+        pipeline: [{ $project: { nom: 1, prenom: 1, email: 1, matiere: 1, imagePath: 1 } }]
+    });
+    sendPaginatedResult(aggregateQuery, res, 1, 100);
+};
+
 /* Elements de l'Home Page */
 const homeInfo = async (req, res) => {
     let selector = {
@@ -168,5 +193,6 @@ module.exports = {
     createReportCard, 
     releveNotes,
     updateEtudiant,
-    homeInfo
+    homeInfo,
+    homeInfoMatiere
 };
