@@ -42,6 +42,31 @@ function sendPaginatedResult(aggregateQuery, res, page, limit) {
 /********************
 * FONCTIONS - START *
 ********************/
+/* LISTE des ETUDIANTS EN relation avec ce professeur */
+const listeEtudiants = async (req, res) => {
+    const aggregateQuery = Assignment.aggregate();
+    const matching = { professeur: ObjectId(req.params.id) } ;
+    const grouping = { 
+        _id: {
+            etudiant: "$etudiant", 
+            professeur: "$professeur"
+        }, 
+        total: {
+            "$sum": 1 
+        }
+    } ;
+    aggregateQuery.match(matching);
+    aggregateQuery.group(grouping);
+    aggregateQuery.lookup({
+        from: 'etudiants',
+        localField: '_id.etudiant',
+        foreignField: '_id',
+        as: 'etudiantDetails',
+        pipeline: [{ $project: { nom: 1, prenom: 1, email: 1, imagePath: 1 } }]
+    });
+    sendPaginatedResult(aggregateQuery, res, req.query.page, req.query.limit);
+};
+
 /* LISTE des ASSIGNMENTS d'un PROFESSEUR [PAGINATION - SORT - par CATÉGORIE RENDU ou NON-RENDU] */
 const listeAssignment = async (req, res) => {
     const aggregateQuery = Assignment.aggregate();
@@ -99,5 +124,6 @@ module.exports = {
     login, 
     listeMatiere,
     listeAssignment,
-    updateProfesseur
+    updateProfesseur,
+    listeEtudiants
 } ;
