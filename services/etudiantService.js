@@ -105,7 +105,7 @@ const searchAssignment = async (req, res) => {
     const dateDeCreationSup = req.query.dateDeCreationSup || MAX_DATE;
     const dateDeRenduInf = req.query.dateDeRenduInf || MIN_DATE;
     const dateDeRenduSup = req.query.dateDeRenduSup || MAX_DATE;
-    const rendu = req.query.rendu || 0.
+    const rendu = req.query.rendu || 0;
     let matiere = req.query.matiere;
     if (matiere == "Toutes les matières") matiere = "";
     const aggregateQuery = Assignment.aggregate();

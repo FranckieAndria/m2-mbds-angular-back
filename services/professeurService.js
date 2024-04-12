@@ -42,6 +42,28 @@ function sendPaginatedResult(aggregateQuery, res, page, limit) {
 /********************
 * FONCTIONS - START *
 ********************/
+/* RECHERCHE | ASSIGNMENTS D'UN ETUDIANT */
+const recherche = async (req, res) => {
+    const titre = req.query.titre || '' ;
+    const dateDeCreationInf = req.query.dateDeCreationInf || MIN_DATE;
+    const dateDeCreationSup = req.query.dateDeCreationSup || MAX_DATE;
+    const dateDeRenduInf = req.query.dateDeRenduInf || MIN_DATE;
+    const dateDeRenduSup = req.query.dateDeRenduSup || MAX_DATE;
+    const rendu = req.query.rendu || 0;
+    const aggregateQuery = Assignment.aggregate();
+    let matching = {
+        professeur: ObjectId(req.params.id),
+        etudiant: ObjectId(req.params.etudiant),
+        dateDeRendu: {$gte: new Date(dateDeRenduInf), $lte: new Date(dateDeRenduSup)},
+        dateDeCreation: {$gte: new Date(dateDeCreationInf), $lte: new Date(dateDeCreationSup)}
+    };
+    if (titre != 'undefined') matching.titre = { $regex: new RegExp(titre, "i") };
+    if (rendu != 0) matching.rendu = (rendu == 1);
+    aggregateQuery.lookup(getLookupEtudiant([{ $project: { nom: 1, prenom: 1, email: 1, imagePath: 1 } }]));
+    aggregateQuery.match(matching);
+    sendPaginatedResult(aggregateQuery, res, req.query.page, req.query.limit);
+};
+
 /* LISTE des ETUDIANTS EN relation avec ce professeur */
 const listeEtudiants = async (req, res) => {
     const aggregateQuery = Assignment.aggregate();
@@ -125,5 +147,6 @@ module.exports = {
     listeMatiere,
     listeAssignment,
     updateProfesseur,
-    listeEtudiants
+    listeEtudiants,
+    recherche
 } ;
