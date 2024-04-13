@@ -42,25 +42,19 @@ function sendPaginatedResult(aggregateQuery, res, page, limit) {
 /********************
 * FONCTIONS - START *
 ********************/
-/* RECHERCHE | ASSIGNMENTS D'UN ETUDIANT */
-const recherche = async (req, res) => {
+/* DETAILS | ASSIGNMENTS D'UN ETUDIANT */
+const details = async (req, res) => {
     const titre = req.query.titre || '' ;
-    const dateDeCreationInf = req.query.dateDeCreationInf || MIN_DATE;
-    const dateDeCreationSup = req.query.dateDeCreationSup || MAX_DATE;
-    const dateDeRenduInf = req.query.dateDeRenduInf || MIN_DATE;
-    const dateDeRenduSup = req.query.dateDeRenduSup || MAX_DATE;
     const rendu = req.query.rendu || 0;
     const aggregateQuery = Assignment.aggregate();
     let matching = {
         professeur: ObjectId(req.params.id),
-        etudiant: ObjectId(req.params.etudiant),
-        dateDeRendu: {$gte: new Date(dateDeRenduInf), $lte: new Date(dateDeRenduSup)},
-        dateDeCreation: {$gte: new Date(dateDeCreationInf), $lte: new Date(dateDeCreationSup)}
     };
+    if (req.query.etudiant) matching.etudiant = ObjectId(req.query.etudiant);
     if (titre != 'undefined') matching.titre = { $regex: new RegExp(titre, "i") };
     if (rendu != 0) matching.rendu = (rendu == 1);
-    aggregateQuery.lookup(getLookupEtudiant([{ $project: { nom: 1, prenom: 1, email: 1, imagePath: 1 } }]));
     aggregateQuery.match(matching);
+    aggregateQuery.lookup(getLookupEtudiant([{ $project: { nom: 1, prenom: 1, email: 1, imagePath: 1 } }]));
     sendPaginatedResult(aggregateQuery, res, req.query.page, req.query.limit);
 };
 
@@ -86,6 +80,7 @@ const listeEtudiants = async (req, res) => {
         as: 'etudiantDetails',
         pipeline: [{ $project: { nom: 1, prenom: 1, email: 1, imagePath: 1 } }]
     });
+
     sendPaginatedResult(aggregateQuery, res, req.query.page, req.query.limit);
 };
 
@@ -148,5 +143,5 @@ module.exports = {
     listeAssignment,
     updateProfesseur,
     listeEtudiants,
-    recherche
+    details
 } ;
