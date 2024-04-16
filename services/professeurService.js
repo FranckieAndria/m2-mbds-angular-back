@@ -99,7 +99,7 @@ const listeAssignment = async (req, res) => {
 
 /* LISTE des MATIÈRES pour l'enregistrement d'un NOUVELL ASSIGNMENT */
 const listeMatiere = async (req, res) => {
-    const professeurs = await Professeur.find().select('nom prenom matiere.intitule imagePath').exec();
+    const professeurs = await Professeur.find().select('nom prenom email matiere.intitule imagePath').exec();
     res.send(professeurs);
 };
 
