@@ -44,6 +44,12 @@ function sendPaginatedResult(aggregateQuery, res, page, limit) {
 /********************
 * FONCTIONS - START *
 ********************/
+/* Liste de tous les étudiants pour l'Administrateur */
+const allEtudiants = async(req, res) => {
+    const etudiants = await Etudiant.find().select('nom prenom email niveau imagePath').exec();
+    res.send(etudiants);
+};
+
 /* Nombre d'assignments de l'étudiant groupé par Professeur | Matière */
 const homeInfoMatiere = async (req, res) => {
     const aggregateQuery = Assignment.aggregate();
@@ -194,5 +200,6 @@ module.exports = {
     releveNotes,
     updateEtudiant,
     homeInfo,
-    homeInfoMatiere
+    homeInfoMatiere,
+    allEtudiants
 };
