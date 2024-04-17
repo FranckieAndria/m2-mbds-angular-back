@@ -3,6 +3,10 @@ var router = express.Router();
 
 const { login, listeMatiere, listeAssignment, updateProfesseur, listeEtudiants, details } = require('../services/professeurService');
 const verifyToken = require('../services/tokenValidator');
+const verifyAdmin = require('../services/adminValidator');
+
+/* LISTE de tous les PROFESSEURS pour l'administrateur */
+router.get('', verifyAdmin, listeMatiere);
 
 /* LISTE des MATIÈRES pour l'enregistrement d'un NOUVELL ASSIGNMENT */
 router.get('/matieres', listeMatiere);
@@ -17,7 +21,7 @@ router.get('/assignments', verifyToken, listeAssignment);
 router.get('/etudiants', verifyToken, listeEtudiants);
 
 /* MODIFICATION */
-router.put('/:id', updateProfesseur);
+router.put('/:id', verifyAdmin, updateProfesseur);
 
 /* Login */
 router.post('/login', login) ;

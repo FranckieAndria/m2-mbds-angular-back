@@ -50,6 +50,7 @@ const prefix = '/api';
 app.use(prefix + '/etudiants', require('./routes/etudiants'));
 app.use(prefix + '/professeurs', require('./routes/professeurs'));
 app.use(prefix + '/assignments', require('./routes/assignments'));
+app.use(prefix + '/administrateurs', require('./routes/administrateurs.js'));
 /*****************
 * ROUTES - START *
 *****************/

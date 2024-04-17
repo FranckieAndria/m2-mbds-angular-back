@@ -3,9 +3,10 @@ var router = express.Router();
 
 const { login, listeAssignment, searchAssignment, saveAssignment, createReportCard, releveNotes, updateEtudiant, homeInfo, homeInfoMatiere, allEtudiants } = require('../services/etudiantService');
 const verifyToken = require('../services/tokenValidator');
+const verifyAdmin = require('../services/adminValidator');
 
 /* Liste de tous les étudiants pour l'Administrateur */
-router.get('', allEtudiants);
+router.get('', verifyAdmin, allEtudiants);
 
 /* Login */
 router.post('/login', login);
@@ -32,6 +33,6 @@ router.get('/report', verifyToken, createReportCard);
 router.get('/releve', verifyToken, releveNotes);
 
 /* MODIFICATION */
-router.put('/:id', updateEtudiant);
+router.put('/:id', verifyAdmin, updateEtudiant);
 
 module.exports = router;
