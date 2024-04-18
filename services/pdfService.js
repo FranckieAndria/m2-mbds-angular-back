@@ -4,12 +4,14 @@ const fs = require('fs');
 const createPDF = (res, assignments, id, nom, prenom, email, niveau) => {
     const htmlContent = createHTMLContent(assignments, nom, prenom, email, niveau);
     const options = { format: 'A4' };
+
+// Log repère dans render.com
+console.log('Création du fichier PDF : ' + id);
+
     pdf.generatePdf({ content: htmlContent }, options).then(pdfBuffer => {
 
-// Log repère dans render.com - START
+// Log repère dans render.com
 console.log('PDF généré avec succès !');
-console.log('Envoie du fichier en cours ...');
-// Log repère dans render.com - END
 
         res.contentType("application/pdf");
         res.setHeader('Content-Disposition', 'attachment; filename=' + id + '.pdf');
