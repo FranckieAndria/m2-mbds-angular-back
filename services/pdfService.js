@@ -5,10 +5,12 @@ const createPDF = (res, assignments, id, nom, prenom, email, niveau) => {
     const htmlContent = createHTMLContent(assignments, nom, prenom, email, niveau);
     const options = { format: 'A4' };
     pdf.generatePdf({ content: htmlContent }, options).then(pdfBuffer => {
-        const filePath = './public/pdf/' + id + '.pdf';
+        const filePath = '/public/pdf/' + id + '.pdf';
         fs.writeFileSync(filePath, pdfBuffer);
         fs.readFile(filePath, function (err, data) {
-            if (err) {}
+            if (err) {
+                console.log(err);
+            }
             else {
                 res.contentType("application/pdf");
                 res.send(data);
