@@ -5,9 +5,19 @@ const createPDF = (res, assignments, id, nom, prenom, email, niveau) => {
     const htmlContent = createHTMLContent(assignments, nom, prenom, email, niveau);
     const options = { format: 'A4' };
     pdf.generatePdf({ content: htmlContent }, options).then(pdfBuffer => {
+
+// Log repère dans render.com - START
+console.log('PDF généré avec succès !');
+console.log('Envoie du fichier en cours ...');
+// Log repère dans render.com - END
+
+        res.contentType("application/pdf");
+        res.setHeader('Content-Disposition', 'attachment; filename=' + id + '.pdf');
+        res.send(pdfBuffer);
+
+/*
         const filePath = 'public/pdf/' + id + '.pdf';
         fs.writeFileSync(filePath, pdfBuffer);
-console.log('PDF créé avec succès : ' + filePath);
         fs.readFile(filePath, function (err, data) {
             if (err) {
                 console.log(err);
@@ -17,6 +27,7 @@ console.log('PDF créé avec succès : ' + filePath);
                 res.send(data);
             }
         });
+*/
     }).catch(error => {
         console.error('Erreur lors de la génération du PDF:', error);
     });
