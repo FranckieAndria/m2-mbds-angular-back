@@ -20,7 +20,7 @@ npm start
 ```
 npm install
 ```
-- Effectuer un build du projet en éxecutant la commande :
+- Effectuer un build (compilation et construction) du projet, cette commande est **optionnelle** :
 ```
 ng build
 ```
@@ -29,7 +29,7 @@ ng build
 ng serve
 ```
 - L'application Angular est maintenant démarrée :tada: , accèssible depuis votre navigateur à l'adresse [http://localhost:4000](http://localhost:4000)  
-> [!Utilisation de l'API de l'application en local]
+> [!Note]
 > Si vous souhaitez utiliser l'API de votre application en local :
 - Ouvrez le fichier `src/environnement/environnement.ts`
 - Remplacez la valeur de l'attribut `baseUrl` par `http://localhost:8010/api` 
