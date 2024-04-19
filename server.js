@@ -5,6 +5,7 @@ let express = require('express');
 const cors = require('cors');
 let app = express();
 let bodyParser = require('body-parser');
+require("dotenv").config();
 /*********************
 * REQUIREMENTS - END *
 *********************/
