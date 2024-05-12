@@ -1,12 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
-const { login, listeMatiere, listeAssignment, updateProfesseur, listeEtudiants, details } = require('../services/professeurService');
+const { login, listeMatiere, listeAssignment, updateProfesseur, listeEtudiants, details, home } = require('../services/professeurService');
 const verifyToken = require('../services/tokenValidator');
 const verifyAdmin = require('../services/adminValidator');
 
 /* LISTE de tous les PROFESSEURS pour l'administrateur */
 router.get('', verifyAdmin, listeMatiere);
+
+/* A PROPOS du professeur connecté */
+router.get('/home', verifyToken, home);
 
 /* LISTE des MATIÈRES pour l'enregistrement d'un NOUVELL ASSIGNMENT */
 router.get('/matieres', listeMatiere);

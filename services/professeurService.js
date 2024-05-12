@@ -42,6 +42,27 @@ function sendPaginatedResult(aggregateQuery, res, page, limit) {
 /********************
 * FONCTIONS - START *
 ********************/
+/* A propos pour la Home page */
+const home = async (req, res) => {
+    let selector = {
+        professeur: ObjectId(req.params.id)
+    };
+    const total = await Assignment.countDocuments(selector).exec();
+    selector.rendu = true;
+    const rendu = await Assignment.countDocuments(selector).exec();
+    selector.rendu = false;
+    const non_rendu = await Assignment.countDocuments(selector).exec();
+    const professeur = await Professeur.find({ _id: ObjectId(req.params.id) }).select("nom prenom email matiere").exec();
+
+    const result = {
+        total: total || 0,
+        rendu: rendu || 0,
+        non_rendu: non_rendu || 0,
+        professeur: professeur
+    };
+    res.send(result);
+};
+
 /* DETAILS | ASSIGNMENTS D'UN ETUDIANT */
 const details = async (req, res) => {
     const titre = req.query.titre || '' ;
@@ -143,5 +164,6 @@ module.exports = {
     listeAssignment,
     updateProfesseur,
     listeEtudiants,
-    details
+    details,
+    home
 } ;
