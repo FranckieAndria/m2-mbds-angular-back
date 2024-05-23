@@ -58,6 +58,17 @@ const updateAssignment = async (req, res) => {
     });
 };
 
+//Modification ASSIGNMENT : coté ADMIN
+const updateAssignments = async (req, res) => {
+    const result = await Assignment.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.send({
+        updated: result != null,
+        message: result != null ? 'Information(s) sur l\'assignement modifiée(s) avec succès' : 'Erreur lors de la modification des informations sur le professeur',
+        assignment: result
+    });
+};
+
+
 function getEmailContent(titre, professeur, matiere, note, remarque) {
     const result = `Bonjour,<br><br>Pour votre information, votre assignment a été noté par votre professeur.<br>Voici plus de détails sur votre assignment : 
             <li><b>Titre : </b>` + titre + `</li>
@@ -66,7 +77,7 @@ function getEmailContent(titre, professeur, matiere, note, remarque) {
             <li><b>Note : </b>` + note + `/20</li>
             <li><b>Remarque : </b>` + remarque + `</li><br>Cordialement,` ;
     return result ;
-}
+};
 
 /* SUPPRESSION D'UN ASSIGNMENT */
 const deleteAssignment = async (req, res) => {
@@ -82,5 +93,6 @@ module.exports = {
     details, 
     deleteAssignment, 
     updateAssignment,
+    updateAssignments,
     getAll
 };

@@ -19,6 +19,17 @@ const home = async (req, res) => {
     res.send(result);
 };
 
+/* SUPPRESSION D'UN ASSIGNMENT */
+const deleteAssignment = async (req, res) => {
+    const result = await Assignment.findByIdAndRemove(req.params.id);
+    res.send({
+        deleted: true,
+        message: 'Assignment supprimé avec succès',
+        assignment: result
+    });
+};
+
 module.exports = {
-    home
+    home,
+    deleteAssignment
 };
