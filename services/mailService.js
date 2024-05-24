@@ -15,7 +15,7 @@ const sendMail = async (sendTo, mailContent) => {
     transporter.sendMail({
         from: {
             name: "Université CA - Communication",
-            address: usermail
+            address: process.env.EMAIL_USERNAME
         },
         to: sendTo,
         subject: 'ASSIGNMENT RENDU - INFO',

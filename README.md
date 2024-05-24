@@ -28,7 +28,7 @@ ng build
 ```
 ng serve
 ```
-- L'application Angular est maintenant démarrée :tada: , accèssible depuis votre navigateur à l'adresse [http://localhost:4000](http://localhost:4000) <br>
+- L'application Angular est maintenant démarrée :tada: , accèssible depuis votre navigateur à l'adresse [http://localhost:4200](http://localhost:4200) <br>
 > [!NOTE]
 > Si vous souhaitez utiliser l'API de votre application local :
 > - Ouvrez le fichier `src/environnement/environnement.ts`
@@ -44,7 +44,7 @@ Pour vous connecter, vous pouvez voir ci-dessous la liste des creditentials
 > - Toutes les adresses mails se terminent par `@gmail.com`
 > - Tous les mots de passe se terminent par `Pass` (sauf administrateur)
 <br><br>
-> Bien sûr, sauf si vous avez déjà modifié ses valeurs depuis **la partie administrateur** :wink:
+> Bien sûr, sauf si vous avez déjà modifié ses valeurs depuis **la partie administrateur** :writing_hand:
 
 # Contributions au projet
 
@@ -93,16 +93,34 @@ Pour vous connecter, vous pouvez voir ci-dessous la liste des creditentials
 - Liste de tous les `étudiants` avec possibilité de modification
 
 ## RAKOTONAIVO Ambinintsoa
+**[ETUDIANT] Mise en place de la page d'accueil**
+- Présentation des données sous forme de tableau triable avec `mat-table`
+- Affichage des statistiques sur les Assignments de l'étudiant
+
+**[PROFESSEUR] Liste des assignments sur 02 onglets séparés**
+- Liste des assignments rendu et non-rendu avec `scroll infini`
+- Rendu des assignments par `Drag & Drop`
+
+**[ADMINISTRATEUR] Mise en place de la page d'accueil**
+- Liste de toutes les matières
+- Statistique globale de tous les assignments
+
+**[PROFESSEUR] Mise en place de la page d'accueil**
+- Informations sur le professeur et de sa matière
+- Affichage des statistiques sur les Assignments du professeur
 
 ## Contributions communes
 **Conception de la base de données et des modèles**
 - Conception et création des modèles de collections sur `atlas`
 - Implémentation des Schémas dans le backend `nodejs` et `mongoose`
-- Complétion du fichier `readme`
-- Enregistrement et montage du `vidéo`
 
 **Population de la base de données**
 - Enregistrement de `1000 Assignments`
 - Enregistrement de `20 Etudiants`
 - Enregistrement de `05 Professeurs` avec `05 matières`
 - Enregistrement de `01 Administrateur`
+
+**Documentation et hebergement du projet**
+- Complétion du fichier `readme`
+- Enregistrement et montage du `vidéo`
+- Hebergement du Backend et Frontend sur `Render`
